@@ -1,10 +1,11 @@
 import pickle
 import cv2
 import numpy as np
-import os
 import argparse
 import face_recognition as fr
 from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
 
 ap = argparse.ArgumentParser()
@@ -41,8 +42,13 @@ for i,k in enumerate(knownNames) :
         x.append(knownEncodings[i][0])
 x = np.array(x)
 y = np.array(y)
-
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+print('train length',len(y_train))
 model = SVC(decision_function_shape='ovo')
-model.fit(x,y)
-yhat = model.predict(xhat)
-print(yhat)
+model.fit(X_train,y_train)
+ypred = model.predict(X_test)
+acc = 100 *accuracy_score(y_test, ypred)
+
+pred = model.predict(xhat)[0]
+print('The model we build showed an accuracy of {}% on the test data'.format(acc))
+print('The person identified on this image is : {}'.format(pred))

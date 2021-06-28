@@ -52,9 +52,8 @@ for (i,im) in enumerate(imagePaths) :
 		name = (im.split(os.path.sep)[1].split(' ')[0])
 		knownNames.append(name)
 		knownEncodings.append(encoding)
-print(len(knownNames))
-print(len(knownEncodings))
-with open('Encodings.pickle', 'wb') as f:
+
+with open(args['encodings'], 'wb') as f:
 	pickle.dump(knownEncodings, f)
 with open('Names.pickle', 'wb') as f:
 	pickle.dump(knownNames, f)
